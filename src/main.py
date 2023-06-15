@@ -9,20 +9,27 @@ import csv
 import pathlib
 import sys
 
-# Function to total length remaining in a bin
-def getRemainingBinLength(bin, stockLength, bladeWidth):
+# Function to get length of a bin
+def getBinLength(bin, stockLength, bladeWidth):
 	totalLength = 0
 	for length in bin:
 		totalLength += (length[1] + bladeWidth)
-	return stockLength - totalLength
+	return totalLength
+
+# Function to total length remaining in a bin
+def getRemainingBinLength(bin, stockLength, bladeWidth):
+	return stockLength - getBinLength(bin, stockLength, bladeWidth)
 
 # Function to printout bins /w items (lengths) to stdout
-def printBins(bins):
+def printBins(bins, stockLength, bladeWidth):
 	for index, bin in enumerate(bins):
 		print(f"Bin {index}:")
 
 		for item in bin:
-			print(" "*8 + "{}: {:.2f}".format(item[0].ljust(16), item[1]))
+			print(" "*8 + "{}: {:.2f}".format(item[0].ljust(20), item[1]))
+
+		print("\n" + " "*8 + "Total".ljust(20) + ": {:.2f}".format( getBinLength(bin, stockLength, 0) ))
+		print(" "*8 + "Total (inc. blade)".ljust(20) + ": {:.2f}".format( getBinLength(bin, stockLength, bladeWidth) ))
 
 if __name__ == "__main__":
 	print("1D-FF-BinPacking")
@@ -93,7 +100,7 @@ if __name__ == "__main__":
 		# if not, create a new bin
 		# Account for the blade width, if set (defaults to 0)
 		for bin in bins:
-			if getRemainingBinLength(bin, args.stockLength, args.bladeWidth) >= (item[1] + args.bladeWidth):
+			if getRemainingBinLength(bin, args.stockLength, args.bladeWidth) >= item[1]:
 				bin.append(item)
 				itemBinned = True
 				break
@@ -104,4 +111,4 @@ if __name__ == "__main__":
 			bins.append( [item] )
 
 	# Print results
-	printBins(bins)
+	printBins(bins, args.stockLength, args.bladeWidth)
