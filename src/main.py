@@ -29,7 +29,8 @@ def printBins(bins, stockLength, bladeWidth):
 			print(" "*8 + "{}: {:.2f}".format(item[0].ljust(20), item[1]))
 
 		print("\n" + " "*8 + "Total".ljust(20) + ": {:.2f}".format( getBinLength(bin, stockLength, 0) ))
-		print(" "*8 + "Total (inc. blade)".ljust(20) + ": {:.2f}".format( getBinLength(bin, stockLength, bladeWidth) ))
+		# Subtract a single blade width from total, as the final length doesn't need it
+		print(" "*8 + "Total (inc. blade)".ljust(20) + ": {:.2f}".format( getBinLength(bin, stockLength, bladeWidth) - bladeWidth ))
 
 if __name__ == "__main__":
 	print("1D-FF-BinPacking")
@@ -86,7 +87,7 @@ if __name__ == "__main__":
 			lengths.append( (itemDescription, itemLength) )
 
 	# Lengths are now collected, sort lengths largest to smallest
-	lengths.sort(key=lambda lengthTruple: lengthTruple[1], reverse=True)
+	lengths.sort(key=lambda lengthTuple: lengthTuple[1], reverse=True)
 
 	# First empty bin
 	bins.append( [] )
@@ -104,7 +105,7 @@ if __name__ == "__main__":
 				bin.append(item)
 				itemBinned = True
 				break
-			# Item didn't fit, loop goes to nex bin
+			# Item didn't fit, loop goes to next bin
 
 		if not itemBinned:
 			# Item didn't fit in any bin, create a new one and append item
