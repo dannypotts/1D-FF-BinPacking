@@ -72,6 +72,9 @@ if __name__ == "__main__":
 	next(inputReader) # First row is headers
 
 	for index, row in enumerate(inputReader):
+		# If row starts with #, don't add to list
+		if row[0][0] == '#':
+			continue
 		# Validate row
 		try:
 			itemDescription = row[0]
